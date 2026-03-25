@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technopired</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-image: url("https://img.freepik.com/premium-vector/hand-drawn-dark-background-back-school-with-portfolio-watches-school-supplies_638892-196.jpg");
+            background-size: 100% 100vh;
+            color: #fff;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-attachment: fixed;
+        }
+        .navbar {
+            width: 100%;
+            padding: 15px;
+            background: #1f1f1f;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .title {
+            color: #00eaff;
+            font-size: 22px;
+            margin-left: 15px;
+            font-weight: bold;
+            text-shadow: 0px 0px 10px #00eaff;
+        }
+        .logout-btn {
+            margin-right: 15px;
+            padding: 8px 15px;
+            background: #ff3b3b;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            box-shadow: 0px 0px 10px #ff3b3b;
+        }
+        .logout-btn:hover {
+            background: #e22b2b;
+            box-shadow: 0px 0px 15px #e22b2b;
+        }
+
+        .dice-container {
+            margin-top: 10px;
+            font-size: 100px;
+            cursor: pointer;
+            transition: transform 0.5s;
+            text-shadow: 0px 0px 20px #00eaff;
+        }
+        .dice-container:active {
+            transform: rotate(720deg);
+        }
+        .question-box {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+        }
+        .question {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #00eaff;
+            text-shadow: 0px 0px 10px #00eaff;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .option {
+            margin: 8px 0;
+            font-size: 18px;
+        }
+        .option input {
+            margin-right: 8px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .submit-btn {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #ffeb3b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, box-shadow 0.3s;
+            box-shadow: 0px 0px 10px #ffeb3b;
+        }
+        .submit-btn:hover {
+            background: #fbc02d;
+            box-shadow: 0px 0px 15px #fbc02d;
+        }
+
+        /* Welcome Title Animation */
+        .welcome-title {
+            margin-top: 100px;
+            font-size: 40px;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-title span {
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInLetter 5s 10s forwards;
+            font-weight: bold;
+            font-size: 50px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb3b, #4caf50, #2196f3, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes fadeInLetter {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="title">Technopired</div>
+        <div>
+            <a href="/home" class="logout-btn">Home</a>
+            <a class="logout-btn" href="/">Logout</a>
+        </div>
+    </div>
+
+    <h1 class="welcome-title"></h1>
+    
+    <div class="dice-container" onclick="rollDice()" id="dice">
+        <div class="title">Click on Dice</div> <br> 🎲
+    </div>
+
+    <script>
+
+        function rollDice() {
+            let dice = document.getElementById("dice");
+            let randomNumber = Math.floor(Math.random() * 6) + 1;
+
+            if(randomNumber == 1){
+                text = "One"
+            }
+            if(randomNumber == 2){
+                text = "Two"
+            }
+            if(randomNumber == 3){
+                text = "Three"
+            }
+            if(randomNumber == 4){
+                text = "Four"
+            }
+            if(randomNumber == 5){
+                text = "Five"
+            }
+            if(randomNumber == 6){
+                text = "Six"
+            }
+            dice.style.transform = "rotate(720deg)"; 
+            setTimeout(() => {
+                dice.innerHTML = `🎲 ${text}`;
+                dice.style.transform = "rotate(0deg)"; 
+                const utterance = new SpeechSynthesisUtterance(randomNumber);
+                window.speechSynthesis.speak(utterance);
+            }, 500);
+        }
+    </script>
+    
+    <script>
+
+        // Title Animation - Display One Letter at a Time
+        function animateTitle() {
+            const text = "W E L C O M E";
+            const titleElement = document.querySelector(".welcome-title");
+
+            titleElement.innerHTML = "";
+            text.split("").forEach((char, index) => {
+                let span = document.createElement("span");
+                span.textContent = char;
+                span.style.marginRight = '20px';
+                span.style.animationDelay = `${index * 0.1}s`;
+                titleElement.appendChild(span);
+            });
+        }
+
+        window.onload = animateTitle;
+    </script>
+
+</body>
+</html>

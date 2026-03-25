@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <title>Technopired</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-image: url("https://img.freepik.com/premium-vector/hand-drawn-dark-background-back-school-with-portfolio-watches-school-supplies_638892-196.jpg");
+            background-size: 100% 100vh;
+            background-attachment: fixed;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .navbar {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        .navbar .title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00eaff;
+            text-shadow: 0px 0px 10px #00eaff;
+            margin-left: 15px;
+        }
+        .navbar .logout-btn {
+            background: #ff3b3b;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            margin-right: 15px;
+            text-decoration: none;
+            box-shadow: 0px 0px 10px #ff3b3b;
+        }
+        .navbar .logout-btn:hover {
+            background: #e22b2b;
+            box-shadow: 0px 0px 15px #e22b2b;
+        }
+        .quiz-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+            margin-top: 80px;
+        }
+        .question {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #00eaff;
+            text-shadow: 0px 0px 10px #00eaff;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .option {
+            margin: 8px 0;
+            font-size: 18px;
+        }
+        .option input {
+            margin-right: 8px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .prev-btn {
+            background: #ff3b3b;
+            color: white;
+            box-shadow: 0px 0px 10px #ff3b3b;
+        }
+        .next-btn {
+            background: #00eaff;
+            color: white;
+            box-shadow: 0px 0px 10px #00eaff;
+        }
+        .submit-btn {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0px 0px 10px #4caf50;
+            margin-top: 10px;
+        }
+        .prev-btn:hover {
+            background: #e22b2b;
+            box-shadow: 0px 0px 15px #e22b2b;
+        }
+        .next-btn:hover {
+            background: #0099cc;
+            box-shadow: 0px 0px 15px #0099cc;
+        }
+        .submit-btn:hover {
+            background: #388e3c;
+            box-shadow: 0px 0px 15px #388e3c;
+        }
+        /* Welcome Title Animation */
+        .welcome-title {
+            margin-top: 100px;
+            font-size: 40px;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-title span {
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInLetter 5s 10s forwards;
+            font-weight: bold;
+            font-size: 50px;
+            background: linear-gradient(45deg, #ff0000, #ff7300, #ffeb3b, #4caf50, #2196f3, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes fadeInLetter {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="title">Technopired</div>
+        <div>
+            <a href="/seasaw" class="logout-btn">Home</a>
+            <a class="logout-btn" href="/">Logout</a>
+        </div>
+    </div>
+
+    <h1 class="welcome-title"></h1>
+
+    <div class="quiz-container">
+        <div class="question" id="question-text"></div>
+        <div class="options" id="options-container"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "I have completed my homework" },
+            { question: "I like to eat fruits" },
+            { question: "My favourite subject is English" },
+            { question: "I wash my hands before eating my food" },
+            { question: "Brushing teeth keeps them healthy and clean" },
+            { question: "I wake up early in the morning" },
+            { question: "I like to watch cartoons" },
+            { question: "I am going out to play with my friends" },
+            { question: "I save money in my piggy bank" },
+            { question: "My school bus is coming" },
+            { question: "I can speak two languages" },
+            { question: "I am going out for dinner with my parents" },
+            { question: "I am playing with my pet dog" },
+            { question: "I am feeling thirsty" },
+            { question: "My hobbies are singing and dancing" }
+        ];
+
+
+        let currentQuestionIndex = 0;
+        let answers = {};
+
+        function displayQuestion() {
+
+            const text = "W E L C O M E";
+            const titleElement = document.querySelector(".welcome-title");
+
+            titleElement.innerHTML = "";
+            text.split("").forEach((char, index) => {
+                let span = document.createElement("span");
+                span.textContent = char;
+                span.style.marginRight = '20px';
+                span.style.animationDelay = `${index * 0.1}s`;
+                titleElement.appendChild(span);
+            });
+            
+            let questionText = document.getElementById("question-text");
+            let optionsContainer = document.getElementById("options-container");
+
+            let currentQuestion = questions[currentQuestionIndex];
+            questionText.innerHTML = currentQuestion.question;
+            $.ajax({
+                method:"get",
+                url:"/textspeech",
+                data:{text:currentQuestion.question},
+                success:function(res){
+                    if(res){
+                        if (currentQuestionIndex < questions.length - 1) {
+                            currentQuestionIndex++;
+                            displayQuestion();
+                        }
+                    }else{
+                        displayQuestion();
+                    }
+                }
+            });
+        }
+        window.onload = displayQuestion;
+
+</script>
+</body>
+</html>

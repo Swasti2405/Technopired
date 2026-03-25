@@ -1,0 +1,234 @@
+import cv2
+import numpy as np
+# import dlib
+from math import hypot
+##import pyglet
+import time
+import random
+import os
+
+
+import pygame
+import time
+from gtts import gTTS
+from mutagen.mp3 import MP3
+import time
+
+
+def Play(text1):
+    text1 = str(text1)
+    print('\n------------Entered text--------------\n')
+    print(text1)
+    myobj = gTTS(text=text1, lang='en-us', tld='com', slow=False)
+    myobj.save("voice.mp3")
+    print('\n------------Playing--------------\n')
+    song = MP3("voice.mp3")
+    pygame.mixer.init()
+    pygame.mixer.music.load('voice.mp3')
+    pygame.mixer.music.play()
+    time.sleep(song.info.length)
+    pygame.quit()
+
+
+#detector = dlib.get_frontal_face_detector()
+#predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+
+# Keyboard settings
+##keyboard = np.zeros((600, 1000, 3), np.uint8)
+keyboard = np.zeros((1000, 800, 3), np.uint8)
+
+
+
+keys_set_1 = {
+    0: "IMG\\1.jpg",
+    1: "IMG\\2.jpg",
+    2: "IMG\\3.jpg",
+    3: "IMG\\4.jpg",
+    4: "IMG\\5.jpg",
+    5: "IMG\\6.jpg",
+    6: "IMG\\7.jpg",
+    7: "IMG\\8.jpg",
+    8: "IMG\\9.jpg",
+    9: "IMG\\10.jpg",
+    10: "IMG\\11.jpg",
+    11: "IMG\\12.jpg",
+    12: "IMG\\13.jpg"
+}
+
+
+
+
+def draw_letters(letter_index, text, letter_light):
+    x, y = get_coordinates(letter_index)
+    width, height = 200, 200
+    th = 3
+
+    image_path = keys_set_1[letter_index]
+    image = cv2.imread(image_path)
+    
+##    print(image)
+    
+    image = cv2.resize(image, (width - 2 * th, height - 2 * th))
+
+    if letter_light is True:
+        keyboard[y + th:y + height - th, x + th:x + width - th] = image
+    else:
+        keyboard[y + th:y + height - th, x + th:x + width - th] = (51, 51, 51)
+    cv2.rectangle(keyboard, (x + th, y + th), (x + width - th, y + height - th), (255, 255, 255), th)
+    
+
+def get_coordinates(letter_index):
+    coordinates = {
+        0: (0, 0),
+        1: (200, 0),
+        2: (400, 0),
+        3: (600, 0),
+        4: (0, 200),
+        5: (200, 200),
+        6: (400, 200),
+        7: (600, 200),
+        8: (0, 400),
+        9: (200, 400),
+        10: (400, 400),
+        11: (600, 400),
+        12: (0, 600),
+    }
+    return coordinates[letter_index]
+    
+def draw_menu():
+    rows, cols, _ = keyboard.shape
+    th_lines = 4 # thickness lines
+##    cv2.line(keyboard, (int(cols/2) - int(th_lines/2), 0),(int(cols/2) - int(th_lines/2), rows),
+##             (51, 51, 51), th_lines)
+    ## cv2.putText(keyboard, "PASSword", (80, 300), font, 6, (255, 255, 255), 5)
+##    cv2.putText(keyboard, "RIGHT", (80 + int(cols/2), 300), font, 6, (255, 255, 255), 5)
+
+def midpoint(p1 ,p2):
+    return int((p1.x + p2.x)/2), int((p1.y + p2.y)/2)
+
+font = cv2.FONT_HERSHEY_PLAIN
+
+def get_blinking_ratio(eye_points, facial_landmarks):
+    left_point = (facial_landmarks.part(eye_points[0]).x, facial_landmarks.part(eye_points[0]).y)
+    right_point = (facial_landmarks.part(eye_points[3]).x, facial_landmarks.part(eye_points[3]).y)
+    center_top = midpoint(facial_landmarks.part(eye_points[1]), facial_landmarks.part(eye_points[2]))
+    center_bottom = midpoint(facial_landmarks.part(eye_points[5]), facial_landmarks.part(eye_points[4]))
+
+##    hor_line = cv2.line(frame, left_point, right_point, (0, 255, 0), 2)
+##    ver_line = cv2.line(frame, center_top, center_bottom, (0, 255, 0), 2)
+
+    hor_line_lenght = hypot((left_point[0] - right_point[0]), (left_point[1] - right_point[1]))
+    ver_line_lenght = hypot((center_top[0] - center_bottom[0]), (center_top[1] - center_bottom[1]))
+
+    ratio = hor_line_lenght / ver_line_lenght
+    return ratio
+
+def eyes_contour_points(facial_landmarks):
+    left_eye = []
+    right_eye = []
+    for n in range(36, 42):
+        x = facial_landmarks.part(n).x
+        y = facial_landmarks.part(n).y
+        left_eye.append([x, y])
+    for n in range(42, 48):
+        x = facial_landmarks.part(n).x
+        y = facial_landmarks.part(n).y
+        right_eye.append([x, y])
+    left_eye = np.array(left_eye, np.int32)
+    right_eye = np.array(right_eye, np.int32)
+    return left_eye, right_eye
+
+def get_gaze_ratio(eye_points, facial_landmarks):
+    left_eye_region = np.array([(facial_landmarks.part(eye_points[0]).x, facial_landmarks.part(eye_points[0]).y),
+                                (facial_landmarks.part(eye_points[1]).x, facial_landmarks.part(eye_points[1]).y),
+                                (facial_landmarks.part(eye_points[2]).x, facial_landmarks.part(eye_points[2]).y),
+                                (facial_landmarks.part(eye_points[3]).x, facial_landmarks.part(eye_points[3]).y),
+                                (facial_landmarks.part(eye_points[4]).x, facial_landmarks.part(eye_points[4]).y),
+                                (facial_landmarks.part(eye_points[5]).x, facial_landmarks.part(eye_points[5]).y)], np.int32)
+    # cv2.polylines(frame, [left_eye_region], True, (0, 0, 255), 2)
+
+    height, width, _ = frame.shape
+    mask = np.zeros((height, width), np.uint8)
+    cv2.polylines(mask, [left_eye_region], True, 255, 2)
+    cv2.fillPoly(mask, [left_eye_region], 255)
+    eye = cv2.bitwise_and(gray, gray, mask=mask)
+
+    min_x = np.min(left_eye_region[:, 0])
+    max_x = np.max(left_eye_region[:, 0])
+    min_y = np.min(left_eye_region[:, 1])
+    max_y = np.max(left_eye_region[:, 1])
+
+    gray_eye = eye[min_y: max_y, min_x: max_x]
+    _, threshold_eye = cv2.threshold(gray_eye, 70, 255, cv2.THRESH_BINARY)
+    height, width = threshold_eye.shape
+    left_side_threshold = threshold_eye[0: height, 0: int(width / 2)]
+    left_side_white = cv2.countNonZero(left_side_threshold)
+
+    right_side_threshold = threshold_eye[0: height, int(width / 2): width]
+    right_side_white = cv2.countNonZero(right_side_threshold)
+
+    if left_side_white == 0:
+        gaze_ratio = 1
+    elif right_side_white == 0:
+        gaze_ratio = 5
+    else:
+        gaze_ratio = left_side_white / right_side_white
+    return gaze_ratio
+
+# Counters
+frames = 0
+letter_index = 0
+blinking_frames = 0
+frames_to_blink = 6
+frames_active_letter = 9
+
+# Text and keyboard settings
+text = ""
+text1=[]
+keyboard_selected = "left"
+last_keyboard_selected = "left"
+select_keyboard_menu = False
+keyboard_selection_frames = 0
+count=0
+pf =['1','2','3','4']
+
+scanned=0
+
+once=1
+scanned =1
+
+
+while True:
+    keyboard[:] = (26, 26, 26)
+    frames += 1
+
+    if select_keyboard_menu is True:
+        draw_menu()
+
+    # Keyboard selected
+    if keyboard_selected == "left":
+        keys_set = keys_set_1
+
+    active_letter = keys_set[letter_index]
+
+    # Display letters on the keyboard
+    if select_keyboard_menu is False:
+        if frames == frames_active_letter:
+            time.sleep(0.5)
+            letter_index += 1
+            frames = 0
+        if letter_index == 10:
+            letter_index = 0
+        for i in range(10):
+            if i == letter_index:
+                light = True
+            else:
+                light = False
+            draw_letters(i, keys_set[i], light)
+
+    cv2.imshow("Virtual keyboard", keyboard)
+
+    if cv2.waitKey(100) & 0xFF == ord('q'):
+        Play(letter_index)
+
+cv2.destroyAllWindows()

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technopired</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* background: linear-gradient(135deg, #1e1e1e, #3a3a3a); */
+            background-image: url("https://img.freepik.com/premium-vector/hand-drawn-dark-background-back-school-with-portfolio-watches-school-supplies_638892-196.jpg");
+            color: white;
+            background-size: 100% 100vh;
+        }
+        .navbar {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+        }
+        .title {
+            color: #00eaff;
+            font-size: 22px;
+            margin-left: 15px;
+            font-weight: bold;
+            text-shadow: 0px 0px 10px #00eaff;
+        }
+        .navbar .links a {
+            color: #00eaff;
+            text-shadow: 0px 0px 10px #00eaff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+        .navbar .links a:hover {
+            color: #ffeb3b;
+        }
+        .container {
+            width: 350px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+            margin-top: 60px;
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .container.active {
+            display: block;
+        }
+        .input-box {
+            position: relative;
+            margin: 10px 0;
+        }
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            padding-left: 40px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            background: #222;
+            color: white;
+        }
+        .input-box input::placeholder {
+            color: gray;
+        }
+        .input-box i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #ffeb3b;
+            color: black;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+        button:hover {
+            background: #fbc02d;
+        }
+        .about-img {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        .map {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="title">Technopired</div>
+        <div class="links">
+            <a onclick="toggleForm('signup')">Signup</a>
+            <a onclick="toggleForm('signin')">Signin</a>
+            <a onclick="toggleForm('about')">About Us</a>
+            <a onclick="toggleForm('contact')">Contact Us</a>
+        </div>
+    </div>
+
+    <div id="signup" class="container active">
+        <h2>Signup</h2>
+        <form action="/signup" method="post">
+            <div class="input-box">
+                <i class="fa fa-user"></i>
+                <input type="text" placeholder="Username" name="username" required>
+            </div>
+            <div class="input-box">
+                <i class="fa fa-envelope"></i>
+                <input type="email" placeholder="Email" name="email" required>
+            </div>
+            <div class="input-box">
+                <i class="fa fa-phone"></i>
+                <input type="tel" placeholder="Phone Number" name="phone" required>
+            </div>
+            <div class="input-box">
+                <i class="fa fa-lock"></i>
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <div id="signin" class="container">
+        <h2>Signin</h2>
+        <form action="/signin" method="post">
+            <div class="input-box">
+                <i class="fa fa-envelope"></i>
+                <input type="email" placeholder="Email" name="email" required>
+            </div>
+            <div class="input-box">
+                <i class="fa fa-lock"></i>
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <div id="about" class="container">
+        <h2>About Us</h2>
+        <hr>
+        <br>
+        <p>Welcome to My Website. We provide top-notch services and solutions for your digital needs. Our team is dedicated to delivering excellence and innovation.</p>
+        <img src="data:image/png;base64,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" class="about-img">
+    </div>
+    <div id="contact" class="container">
+        <h2>Contact Us</h2>
+        <hr><br>
+        <p>Email: contact@mywebsite.com</p>
+        <p>Phone: +123 456 7890</p>
+        <p>Address: 123 Digital Street, Web City, Internet</p>
+        <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345098274!2d144.9537353159046!3d-37.81627974202186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0x5045675218ce6e0!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2sin!4v1614844825111!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+    <script>
+        function toggleForm(formId) {
+            let sections = ['signup', 'signin', 'about', 'contact'];
+            sections.forEach(id => document.getElementById(id).classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
+        }
+    </script>
+
+    <script>
+        if('{{msg}}'){
+            alert('{{msg}}');
+        }
+    </script>
+</body>
+</html>
